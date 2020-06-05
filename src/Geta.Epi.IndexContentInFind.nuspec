@@ -1,21 +1,22 @@
-﻿<?xml version="1.0"?>
-<package >
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package>
     <metadata>
-        <id>Geta.Epi.IndexContentInFind</id>
+        <id>Immeo.Epi.IndexContentInFind.Commerce</id>
         <version>$version$</version>
-        <title>Geta.Epi.IndexContentInFind</title>
-        <authors>Geta</authors>
-        <owners>Geta</owners>
-        <projectUrl>https://github.com/Geta/Epi.IndexContentInFind</projectUrl>
-        <iconUrl>https://cdn.geta.no/opensource/icons/Geta-logo-3.png</iconUrl>
+        <title>Immeo.Epi.IndexContentInFind.Commerce</title>
+        <authors>Geta and Immeo</authors>
+        <owners>Immeo</owners>
+        <projectUrl>https://github.com/immeorfj/Epi.IndexContentInFind</projectUrl>
+        <icon>images\immeo.png</icon>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
-        <description>Tool to index content items in Episerver Find. Makes it possible to index a single content item or an item including it's descendents.</description>
+        <description>Tool to index content items in Episerver Find. Makes it possible to index a single content item or an item including it's descendents. Originally authored by Geta, but modified with Commerce support by Immeo.</description>
         <releaseNotes></releaseNotes>
         <copyright></copyright>
-        <tags>Episerver, Geta</tags>
+        <tags>Episerver, Geta, Immeo</tags>
         <dependencies>
             <dependency id="EPiServer.Framework" version="11.1.0" />
-            <dependency id="EPiServer.CMS.Core" version="11.1.0" />
+            <dependency id="EPiServer.CMS.Core" version="11.2.1" />
+            <dependency id="EPiServer.Commerce.Core" version="11.5.0" />
             <dependency id="EPiServer.CMS.UI.Core" version="11.1.0" />
             <dependency id="EPiServer.Find.Cms" version="12.7.0" />
         </dependencies>
@@ -25,5 +26,6 @@
         <file src="bin\geta-epi-indexcontentinfind.zip" target="content\modules\_protected\geta-epi-indexcontentinfind" />
         <file src="web.config.install.xdt" target="content" />
         <file src="web.config.uninstall.xdt" target="content" />
+        <file src="images\immeo.png" target="images\" />
     </files>
 </package>

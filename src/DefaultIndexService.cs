@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using EPiServer;
+using EPiServer.Commerce.Catalog.ContentTypes;
+using EPiServer.Commerce.Catalog.Linking;
 using EPiServer.Core;
 using EPiServer.Find.Cms;
 using EPiServer.ServiceLocation;
@@ -14,22 +16,22 @@ namespace Geta.Epi.IndexContentInFind
     {
         protected readonly IContentLoader ContentLoader;
         protected readonly IContentIndexer ContentIndexer;
+        protected readonly IRelationRepository RelationRepository;
 
-        public DefaultIndexService(IContentLoader contentLoader, IContentIndexer contentIndexer)
+        public DefaultIndexService(IContentLoader contentLoader, IContentIndexer contentIndexer, IRelationRepository relationRepository)
         {
-            if (contentLoader == null) throw new ArgumentNullException("contentLoader");
-            if (contentIndexer == null) throw new ArgumentNullException("contentIndexer");
-            ContentLoader = contentLoader;
-            ContentIndexer = contentIndexer;
+            ContentLoader = contentLoader ?? throw new ArgumentNullException(nameof(contentLoader));
+            ContentIndexer = contentIndexer ?? throw new ArgumentNullException(nameof(contentIndexer));
+            RelationRepository = relationRepository ?? throw new ArgumentNullException(nameof(relationRepository));
         }
 
-        public virtual IEnumerable<ContentIndexingResult> Index(ContentReference contentLink, bool ignoreConventions)
+        public virtual IEnumerable<ContentIndexingResult> Index(ContentReference contentLink)
         {
             var content = ContentLoader.Get<IContent>(contentLink);
-            return ContentIndexer.Index(content, GetIndexOptions(ignoreConventions));
+            return ContentIndexer.Index(content);
         }
 
-        public virtual IEnumerable<ContentIndexingResult> IndexFrom(ContentReference contentLink, bool ignoreConventions)
+        public virtual IEnumerable<ContentIndexingResult> IndexFrom(ContentReference contentLink)
         {
             var mainContent = ContentLoader.Get<IContent>(contentLink);
             var contentReferencesToIndex = ContentLoader.GetDescendents(contentLink);
@@ -38,19 +40,16 @@ namespace Geta.Epi.IndexContentInFind
             // Add main content to list
             contentsToIndex.Insert(0, mainContent);
 
-            return ContentIndexer.Index(contentsToIndex, GetIndexOptions(ignoreConventions));
+            return ContentIndexer.Index(contentsToIndex);
         }
 
-        protected virtual IndexOptions GetIndexOptions(bool ignoreConventions)
+        public virtual IEnumerable<ContentIndexingResult> IndexVariations(ContentReference contentLink)
         {
-            IndexOptions indexOptions = null;
+            var contentReferencesToIndex = new List<ContentReference>() { contentLink };
+            contentReferencesToIndex.AddRange(RelationRepository.GetChildren<ProductVariation>(contentLink).Select(x => x.Child));
 
-            if (ignoreConventions)
-            {
-                indexOptions = new IndexOptions { FilterContent = false };
-            }
-
-            return indexOptions;
+            var contentsToIndex = ContentLoader.GetItems(contentReferencesToIndex, CultureInfo.InvariantCulture).ToList();
+            return ContentIndexer.Index(contentsToIndex);
         }
     }
 }

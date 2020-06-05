@@ -25,8 +25,9 @@ namespace Geta.Epi.IndexContentInFind.Rest
             }
 
             var indexingResults = data.IncludeDescendants
-                ? _indexService.IndexFrom(data.ContentLink, data.Force)
-                : _indexService.Index(data.ContentLink, data.Force);
+                ? data.IsCatalogContent ? _indexService.IndexVariations(data.ContentLink) :
+                _indexService.IndexFrom(data.ContentLink)
+                : _indexService.Index(data.ContentLink);
 
             return Rest(indexingResults);
         }
@@ -35,7 +36,7 @@ namespace Geta.Epi.IndexContentInFind.Rest
     public class IndexInFindRequest
     {
         public ContentReference ContentLink { get; set; }
+        public bool IsCatalogContent { get; set; }
         public bool IncludeDescendants { get; set; }
-        public bool Force { get; set; }
     }
 }

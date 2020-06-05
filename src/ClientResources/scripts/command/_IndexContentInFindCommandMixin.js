@@ -55,6 +55,7 @@
                 store.put({
                     'contentLink': contentData.contentLink,
                     'includeDescendants': this.includeDescendants,
+                    'isCatalogContent': contentData.contentLink.indexOf("CatalogContent") > -1,
                     'force': this.force
                 }).then(lang.hitch(this, function (response) {
                     dialog.hide();

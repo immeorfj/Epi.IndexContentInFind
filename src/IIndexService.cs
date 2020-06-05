@@ -6,7 +6,8 @@ namespace Geta.Epi.IndexContentInFind
 {
     public interface IIndexService
     {
-        IEnumerable<ContentIndexingResult> Index(ContentReference contentLink, bool ignoreConventions);
-        IEnumerable<ContentIndexingResult> IndexFrom(ContentReference contentLink, bool ignoreConventions);
+        IEnumerable<ContentIndexingResult> Index(ContentReference contentLink);
+        IEnumerable<ContentIndexingResult> IndexFrom(ContentReference contentLink);
+        IEnumerable<ContentIndexingResult> IndexVariations(ContentReference contentLink);
     }
 }
